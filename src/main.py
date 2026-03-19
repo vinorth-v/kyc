@@ -85,7 +85,7 @@ def demo_document_unique(image_path: str):
             print(f"🚗 Permis de Conduire de {pc.prenom} {pc.nom}")
             print(f"   Catégories: {', '.join(pc.categories)}")
             print("   ⭐ POINT IMPORTANT: ces catégories ont été détectées")
-            print("      visuellement par le LLM en regardant les cases cochées!")
+            print("      visuellement par le LLM en regardant les cases du permis!")
             print("      Avant = deep learning avec bounding boxes pour chaque case")
             print("      Maintenant = prompt simple!")
 
