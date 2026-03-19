@@ -185,17 +185,14 @@ Extrais:
 
 INFORMATIONS OBLIGATOIRES:
 - nom_titulaire: Nom du titulaire du compte
-- code_banque: Code banque (5 chiffres)
-- code_guichet: Code guichet (5 chiffres)
-- numero_compte: Numéro de compte (11 caractères)
-- cle_rib: Clé RIB (2 chiffres)
 - iban: IBAN complet (doit commencer par FR et faire 27 caractères)
-- bic: Code BIC/SWIFT de la banque (8 ou 11 caractères)
 - nom_banque: Nom de l'établissement bancaire
 
 INFORMATIONS OPTIONNELLES:
-- prenom_titulaire: Prénom du titulaire si présent
-- adresse_agence: Adresse de l'agence bancaire
+- bic: Code BIC/SWIFT de la banque (8 ou 11 caractères)
+- code_guichet: Code guichet (5 chiffres)
+- numero_compte: Numéro de compte (11 caractères)
+- adresse_banque: Adresse de l'agence bancaire
 
 FORMAT RIB FRANÇAIS:
 - Code banque: 5 chiffres
