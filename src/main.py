@@ -108,11 +108,17 @@ def demo_document_unique(image_path: str):
             rib = result.rib
             print("🏦 RIB")
             print(f"   Titulaire: {rib.nom_titulaire}")
-            print(f"   IBAN: {rib.iban}")
-            print(f"   BIC: {rib.bic}")
-            print(f"   Banque: {rib.nom_banque}")
-            print(f"   Checksum IBAN: {'✓ Valide' if rib.iban_valide else '✗ Invalide'}")
-            print("   ⭐ L'IBAN a été validé avec l'algorithme modulo 97!")
+            print(f"   IBAN: {rib.iban or '⚠️  Non détecté'}")
+            if rib.bic:
+                print(f"   BIC: {rib.bic}")
+            if rib.nom_banque:
+                print(f"   Banque: {rib.nom_banque}")
+            if rib.iban:
+                if rib.iban_valide:
+                    print("   Checksum IBAN: ✓ Valide")
+                    print("   ⭐ L'IBAN a été validé avec l'algorithme modulo 97!")
+                else:
+                    print("   Checksum IBAN: ✗ Invalide")
     else:
         print("\n❌ ÉCHEC DE L'EXTRACTION\n")
         if result.erreurs:

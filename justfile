@@ -78,6 +78,11 @@ passeport:
 permis:
     PYTHONPATH=src uv run python src/main.py examples/permis_recto_verso.pdf
 
+# 🏦 Traite un RIB
+[group('demo')]
+rib:
+    PYTHONPATH=src uv run python src/main.py examples/rib.png
+
 # ⚡ Traite une facture EDF
 [group('demo')]
 edf:
