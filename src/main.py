@@ -54,21 +54,27 @@ def demo_document_unique(image_path: str):
             pp = result.passeport
             # Civilité
             if pp.sexe:
-                civilite = "M." if pp.sexe.value == "M" else ("Mme" if pp.sexe.value == "F" else "X")
-                ne_text = "Né" if pp.sexe.value == "M" else ("Née" if pp.sexe.value == "F" else "Né(e)")
+                civilite = (
+                    "M." if pp.sexe.value == "M" else ("Mme" if pp.sexe.value == "F" else "X")
+                )
+                ne_text = (
+                    "Né" if pp.sexe.value == "M" else ("Née" if pp.sexe.value == "F" else "Né(e)")
+                )
                 print(f"📕 Passeport de {civilite} {pp.prenom} {pp.nom} ({pp.sexe.value})")
             else:
                 ne_text = "Né(e)"
                 print(f"📕 Passeport de {pp.prenom} {pp.nom}")
             # Date et lieu de naissance
-            print(f"   {ne_text} le: {pp.date_naissance} à {pp.lieu_naissance if pp.lieu_naissance else '?'}")
+            print(
+                f"   {ne_text} le: {pp.date_naissance} à {pp.lieu_naissance if pp.lieu_naissance else '?'}"
+            )
             # Nationalité
             print(f"   Nationalité: {pp.nationalite}")
             # Statut marital
-            if getattr(pp, 'statut_marital', None):
+            if getattr(pp, "statut_marital", None):
                 print(f"   Statut marital: {pp.statut_marital}")
             # Adresse (si présente)
-            if getattr(pp, 'adresse', None):
+            if getattr(pp, "adresse", None):
                 print(f"   Adresse: {pp.adresse}")
             # Numéro, dates, autorité
             print(f"   N° passeport: {pp.numero_passeport}")

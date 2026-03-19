@@ -220,7 +220,6 @@ class Passeport(BaseModel):
         description="Type de document : passeport",
     )
 
-
     numero_passeport: str = Field(description="Numéro du passeport")
     nom: str = Field(description="Nom de famille (en majuscules)")
     prenom: str = Field(description="Prénom(s)")
@@ -229,7 +228,8 @@ class Passeport(BaseModel):
     nationalite: str = Field(description="Nationalité")
     sexe: Optional[Sexe] = Field(None, description="Genre : M, F, ou X")
     statut_marital: Optional[str] = Field(
-        None, description="Statut marital (ex: célibataire, marié, divorcé), si présent sur le passeport"
+        None,
+        description="Statut marital (ex: célibataire, marié, divorcé), si présent sur le passeport",
     )
     date_emission: date = Field(description="Date de délivrance du document au format YYYY-MM-DD")
     date_expiration: date = Field(description="Date d'expiration du document au format YYYY-MM-DD")
