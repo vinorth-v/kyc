@@ -1,5 +1,7 @@
 """Schémas KYC pour l'extraction de documents d'identité, justificatifs et IBAN."""
 
+from __future__ import annotations
+
 from datetime import date
 from enum import Enum
 from typing import Optional
@@ -182,11 +184,17 @@ class RIB(BaseModel):
 class DossierKYC(BaseModel):
     """Dossier KYC complet avec cohérence entre documents."""
 
-    document_identite: CarteIdentite = Field(description="Document d'identité du client")
+    document_identite: CarteIdentite | Passeport = Field(
+        description="Document d'identité du client (CNI ou Passeport)"
+    )
 
     justificatif_domicile: JustificatifDomicile = Field(description="Justificatif de domicile")
 
     rib: RIB = Field(description="RIB/IBAN du client")
+
+    permis_conduire: Optional["PermisConduire"] = Field(
+        None, description="Permis de conduire (optionnel)"
+    )
 
     noms_concordent: bool = Field(
         False, description="Les noms correspondent-ils entre les documents ?"
@@ -208,6 +216,69 @@ class DossierKYC(BaseModel):
     raisons_rejet: list[str] = Field(
         default_factory=list, description="Liste des raisons de rejet si applicable"
     )
+
+    dossier_complet: bool = Field(
+        False, description="Tous les documents requis sont-ils présents ?"
+    )
+
+    coherence_identite: bool = Field(
+        False, description="Les noms sont-ils cohérents entre les documents ?"
+    )
+
+    erreurs_validation: list[str] = Field(
+        default_factory=list, description="Erreurs de validation détectées"
+    )
+
+    def valider_coherence(self) -> bool:
+        """
+        Valide la cohérence entre les documents du dossier.
+
+        Vérifie:
+        - Cohérence des noms entre les documents
+        - Récence du justificatif de domicile
+        - Validité du checksum IBAN
+        - Validité de la pièce d'identité
+
+        Returns:
+            True si le dossier est valide, False sinon
+        """
+        erreurs = []
+
+        # Vérifier la cohérence des noms
+        nom_identite = self.document_identite.nom.upper()
+        nom_justif = self.justificatif_domicile.nom_complet.upper()
+        if nom_identite in nom_justif:
+            self.noms_concordent = True
+        else:
+            self.noms_concordent = False
+            erreurs.append(
+                f"Incohérence de nom: '{nom_identite}' (identité) vs '{nom_justif}' (justificatif)"
+            )
+
+        # Vérifier la récence du justificatif
+        if not self.justificatif_domicile.est_recent:
+            erreurs.append("Justificatif de domicile trop ancien (> 3 mois)")
+
+        # Vérifier la validité de l'IBAN
+        if not self.rib.iban_valide:
+            erreurs.append(f"Checksum IBAN invalide: {self.rib.iban}")
+
+        # Vérifier la validité de la pièce d'identité
+        if not self.document_identite.est_valide:
+            erreurs.append("Pièce d'identité expirée")
+
+        self.coherence_identite = self.noms_concordent
+        self.dossier_complet = True
+        self.erreurs_validation = erreurs
+        self.raisons_rejet = erreurs
+        self.tous_documents_valides = len(erreurs) == 0
+
+        if len(erreurs) == 0:
+            self.statut_kyc = "APPROVED"
+            return True
+        else:
+            self.statut_kyc = "REJECTED"
+            return False
 
 
 class Passeport(BaseModel):

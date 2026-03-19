@@ -115,7 +115,7 @@ class KYCPipeline:
 
         # Créer le dossier
         dossier = DossierKYC(
-            piece_identite=piece_identite,
+            document_identite=piece_identite,
             justificatif_domicile=justificatif,
             rib=rib,
             permis_conduire=permis,
@@ -185,7 +185,7 @@ class KYCPipeline:
 
         # Créer et valider le dossier
         dossier = DossierKYC(
-            piece_identite=piece_identite, justificatif_domicile=justificatif, rib=rib
+            document_identite=piece_identite, justificatif_domicile=justificatif, rib=rib
         )
 
         print(f"\n{'=' * 70}")

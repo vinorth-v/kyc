@@ -2,8 +2,6 @@
 
 from datetime import date, timedelta
 
-import pytest
-
 from chains.schemas import (
     RIB,
     CarteIdentite,

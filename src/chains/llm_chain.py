@@ -178,8 +178,10 @@ class KYCDocumentChain:
         if token_usage:
             self._log_token_usage("Classification", token_usage)
 
-        # Parser la réponse JSON
+        # Parser la réponse JSON (le LLM peut retourner une liste ou un objet)
         result_json = json.loads(response.text)
+        if isinstance(result_json, list):
+            result_json = result_json[0]
         return ClassificationDocument(**result_json), token_usage
 
     def extract_cni(self, image_path: str | Path) -> tuple[CarteIdentite, dict | None]:
