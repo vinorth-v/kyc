@@ -4,7 +4,7 @@ from datetime import date
 from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class TypeDocument(str, Enum):
@@ -116,16 +116,14 @@ class JustificatifDomicile(BaseModel):
 
     est_recent: bool = Field(False, description="Le document a-t-il moins de 3 mois ?")
 
-    @field_validator("est_recent", mode="before")
-    @classmethod
-    def check_recency(cls, v, info):
+    @model_validator(mode="after")
+    def check_recency(self):
         """Vérifie si le document a moins de 3 mois."""
-        if "date_document" in info.data:
-            from datetime import timedelta
+        from datetime import timedelta
 
-            three_months_ago = date.today() - timedelta(days=90)
-            return info.data["date_document"] >= three_months_ago
-        return False
+        three_months_ago = date.today() - timedelta(days=90)
+        self.est_recent = self.date_document >= three_months_ago
+        return self
 
 
 class RIB(BaseModel):
