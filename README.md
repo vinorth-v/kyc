@@ -169,6 +169,7 @@ dossier.valider_coherence()
 - Python 3.10+
 - Accès Google Cloud avec Vertex AI activé
 - [uv](https://docs.astral.sh/uv/) (gestionnaire de packages ultra-rapide)
+- [just](https://github.com/casey/just) (task runner, optionnel)
 
 ### Setup
 
@@ -178,6 +179,8 @@ git clone <repo-url>
 cd demonstrateur_KYC_grosse_conf
 
 # Installer les dépendances (uv crée automatiquement le .venv)
+just sync
+# ou
 uv sync
 
 # Configuration Google Cloud
@@ -190,8 +193,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/credentials.json"  # Linux/M
 $env:GOOGLE_APPLICATION_CREDENTIALS="path\to\your\credentials.json"  # Windows PowerShell
 ```
 
-> **Note**: Avec uv, pas besoin d'activer manuellement l'environnement virtuel.
-> Utilisez `uv run` pour exécuter les commandes (voir ci-dessous).
+> **Note**: `just --list` affiche toutes les commandes disponibles.
 
 ### Configuration
 
@@ -208,17 +210,31 @@ $env:GOOGLE_APPLICATION_CREDENTIALS="path\to\your\credentials.json"  # Windows P
 
 ## 🎬 Utilisation pour la démo
 
-### Document unique
+### Documents individuels
 
 ```bash
-uv run python src/main.py examples/cni_exemple.jpg
+just cni        # ou: uv run python src/main.py examples/cni.webp
+just passeport  # ou: uv run python src/main.py examples/passeport.webp
+just permis     # ou: uv run python src/main.py examples/permis_recto_verso.pdf
+just edf        # ou: uv run python src/main.py examples/jdom_edf.pdf
+just impots     # ou: uv run python src/main.py examples/jdom_impots.pdf
 ```
 
 ### Dossier complet
 
 ```bash
-uv run python src/main.py --folder examples/dossier_client_001/
+just dossier
+# ou: uv run python src/main.py --folder examples/
 ```
+
+### Document personnalisé
+
+```bash
+just run path/to/document.pdf
+# ou: uv run python src/main.py path/to/document.pdf
+```
+
+> `just --list` affiche toutes les commandes disponibles.
 
 ### En code Python
 
@@ -238,11 +254,8 @@ dossier = pipeline.process_folder("dossier_client/")
 ## 🧪 Tests
 
 ```bash
-# Exécuter les tests
-uv run pytest tests/ -v
-
-# Avec coverage
-uv run pytest tests/ --cov=src --cov-report=html
+just test   # ou: uv run pytest tests/ -v
+just check  # Formatte, lint et tests en une commande
 ```
 
 ## 📊 Métriques de comparaison

@@ -21,7 +21,7 @@
 
 > "Aujourd'hui, regardez ça. Un prompt. Trente lignes de texte.
 > 
-> **[Lancer : `uv run python src/main.py examples/passeport.webp`]**
+> **[Lancer : `just passeport`]**
 > 
 > Le LLM **voit** l'image. Il **comprend** que c'est un passeport. 
 > Classification : 99% de confiance. **Instantané.**"
@@ -50,7 +50,7 @@
 
 ### 🚀 L'IMPACT (1:10 - 1:40)
 
-**[Lancer : `uv run python src/main.py examples/cni.webp`]**
+**[Lancer : `just cni`]**
 
 > "Même chose avec une carte d'identité. Différent format. Différentes données.
 > 
@@ -83,10 +83,10 @@
 
 ```bash
 # Terminal 1 - Prêt à exécuter
-uv run python src/main.py examples/passeport.webp
+just passeport
 
-# Terminal 2 - Prêt à exécuter  
-uv run python src/main.py examples/cni.webp
+# Terminal 2 - Prêt à exécuter
+just cni
 ```
 
 ## 📂 Fichiers à avoir ouverts dans VS Code
