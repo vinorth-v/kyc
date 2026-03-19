@@ -183,23 +183,24 @@ class TestRIB:
             nom_titulaire="MARTIN",
             numero_compte="00001234567",
             code_guichet="00810",
-            iban="FR7630004008100001234567889",
+            iban="FR7610278060740002014820115",
             bic="BNPAFRPP",
             nom_banque="BNP Paribas",
         )
 
-        assert rib.iban == "FR7630004008100001234567889"
+        assert rib.iban == "FR7610278060740002014820115"
         assert rib.nom_titulaire == "MARTIN"
+        assert rib.iban_valide is True
 
     def test_iban_normalisation(self):
         """Test normalisation de l'IBAN avec espaces."""
         rib = RIB(
             nom_titulaire="MARTIN",
-            iban="FR76 3000 4008 1000 0123 4567 889",
+            iban="FR76 1027 8060 7400 0201 4820 115",
             nom_banque="BNP Paribas",
         )
 
-        assert rib.iban == "FR7630004008100001234567889"
+        assert rib.iban == "FR7610278060740002014820115"
 
     def test_iban_invalide_checksum(self):
         """Test qu'un IBAN avec mauvais checksum est marqué invalide."""
@@ -243,7 +244,7 @@ class TestDossierKYC:
             nom_titulaire="MARTIN",
             numero_compte="00001234567",
             code_guichet="00810",
-            iban="FR7630004008100001234567889",
+            iban="FR7610278060740002014820115",
             bic="BNPAFRPP",
             nom_banque="BNP Paribas",
         )
@@ -277,7 +278,7 @@ class TestDossierKYC:
 
         rib = RIB(
             nom_titulaire="MARTIN",
-            iban="FR7630004008100001234567889",
+            iban="FR7610278060740002014820115",
             nom_banque="BNP Paribas",
         )
 

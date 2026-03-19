@@ -342,10 +342,12 @@ class KYCDocumentChain:
             start_rad = time.time()
             classification, token_usage_classification = self.classify_document(image_path)
             time_rad = time.time() - start_rad
-            print(
-                f"   ✓ Type détecté: {classification.type_detecte.value} "
-                f"(confiance: {classification.confiance:.2%})"
+            confiance_str = (
+                f" (confiance: {classification.confiance:.2%})"
+                if classification.confiance is not None
+                else ""
             )
+            print(f"   ✓ Type détecté: {classification.type_detecte.value}{confiance_str}")
             # print(f"   ⏱️  Temps RAD (Classification): {time_rad:.2f}s")
 
             # Accumuler les tokens de classification
