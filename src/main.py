@@ -71,10 +71,10 @@ def demo_document_unique(image_path: str):
             # Nationalité
             print(f"   Nationalité: {pp.nationalite}")
             # Statut marital
-            if getattr(pp, "statut_marital", None):
+            if pp.statut_marital:
                 print(f"   Statut marital: {pp.statut_marital}")
             # Adresse (si présente)
-            if getattr(pp, "adresse", None):
+            if pp.adresse:
                 print(f"   Adresse: {pp.adresse}")
             # Numéro, dates, autorité
             print(f"   N° passeport: {pp.numero_passeport}")

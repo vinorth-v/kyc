@@ -123,8 +123,8 @@ class KYCDocumentChain:
                     "total_tokens": total_tok,
                     "overhead_tokens": overhead,
                 }
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"   ⚠️  Impossible d'extraire les statistiques de tokens: {e}")
         return None
 
     def _log_token_usage(self, document_type: str, token_usage: dict):
@@ -329,6 +329,7 @@ class KYCDocumentChain:
         """
         erreurs = []
         avertissements = []
+        classification = None
         total_tokens_usage = {
             "input_tokens": 0,
             "output_tokens": 0,
@@ -424,7 +425,7 @@ class KYCDocumentChain:
             print(f"❌ Erreur lors du traitement: {e}\n")
             erreurs.append(str(e))
             return ResultatExtractionKYC(
-                classification=classification if "classification" in locals() else None,
+                classification=classification,
                 extraction_reussie=False,
                 regles_metier_validees=False,
                 erreurs=erreurs,

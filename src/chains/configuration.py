@@ -32,12 +32,22 @@ class Configuration:
     @property
     def project_id(self) -> str:
         """ID du projet Google Cloud."""
-        return os.getenv("VAR_LLM_PROJECT_ID", os.getenv("GCP_PROJECT_ID", ""))
+        value = os.getenv("VAR_LLM_PROJECT_ID", os.getenv("GCP_PROJECT_ID", ""))
+        if not value:
+            raise ValueError(
+                "Variable d'environnement manquante : VAR_LLM_PROJECT_ID ou GCP_PROJECT_ID"
+            )
+        return value
 
     @property
     def location(self) -> str:
         """Région Google Cloud."""
-        return os.getenv("VAR_LLM_REGION", os.getenv("GCP_LOCATION", ""))
+        value = os.getenv("VAR_LLM_REGION", os.getenv("GCP_LOCATION", ""))
+        if not value:
+            raise ValueError(
+                "Variable d'environnement manquante : VAR_LLM_REGION ou GCP_LOCATION"
+            )
+        return value
 
     @property
     def model(self) -> str:

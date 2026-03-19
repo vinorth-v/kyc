@@ -244,10 +244,11 @@ class DossierKYC(BaseModel):
         """
         erreurs = []
 
-        # Vérifier la cohérence des noms
+        # Vérifier la cohérence des noms (chaque mot du nom d'identité doit apparaître dans le justificatif)
         nom_identite = self.document_identite.nom.upper()
         nom_justif = self.justificatif_domicile.nom_complet.upper()
-        if nom_identite in nom_justif:
+        mots_identite = nom_identite.split()
+        if mots_identite and all(mot in nom_justif.split() for mot in mots_identite):
             self.noms_concordent = True
         else:
             self.noms_concordent = False
