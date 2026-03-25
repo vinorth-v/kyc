@@ -19,10 +19,12 @@ venv/
 # Environment
 .env
 .env.local
+.DS_Store
 
 # Test outputs
 test_results/
 *.csv
+docs/
 
 # Google Cloud
 credentials.json
