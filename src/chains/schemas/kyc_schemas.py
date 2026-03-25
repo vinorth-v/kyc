@@ -133,9 +133,9 @@ class RIB(BaseModel):
 
     nom_titulaire: str = Field(description="Nom du titulaire du compte")
 
-    iban: Optional[str] = Field(None, description="Numéro IBAN complet (format international)")
+    iban: str = Field(None, description="Numéro IBAN complet (format international)")
 
-    bic: Optional[str] = Field(None, description="Code BIC/SWIFT de la banque")
+    bic: str = Field(None, description="Code BIC/SWIFT de la banque")
 
     nom_banque: Optional[str] = Field(None, description="Nom de la banque")
 
