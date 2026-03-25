@@ -24,6 +24,9 @@ venv/
 # Test outputs
 test_results/
 *.csv
+
+# Perso
+examples/
 docs/
 
 # Google Cloud
