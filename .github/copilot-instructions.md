@@ -1,8 +1,8 @@
-# Pratiques de Code - QP FATCA
+# Pratiques de Code - KYC Document Processing
 
-## Raison d'être
+## Raison d'etre
 
-Ce fichier recense en markdown les pratiques de code que nous suivons pour le projet FATCA. Il vise à orienter développeurs comme Agents IA.
+Ce fichier recense les pratiques de code que nous suivons pour ce projet. Il vise a orienter developpeurs comme Agents IA.
 
 Les pratiques peuvent être :
 - **[obligatoire]** : elles doivent être suivies
@@ -73,7 +73,7 @@ Les pratiques peuvent être :
 
 **[obligatoire]** : Les noms de fichiers doivent être en snake_case
 
-**[obligatoire]** : Les schémas doivent être préfixés par `Schema` (ex: `SchemaW8BEN`, `SchemaRAD`)
+**[obligatoire]** : Les schemas doivent etre prefixes par `Schema` (ex: `SchemaCNI`, `SchemaPasseport`)
 
 **[fortement-conseillée]** : Les fonctions de transformation doivent avoir des noms descriptifs (ex: `extract_taxpayer_info`, `validate_form_fields`)
 
@@ -103,7 +103,7 @@ Les pratiques peuvent être :
 
 **[obligatoire]** : Les schémas Pydantic dans `chains/schemas/` sont la source de vérité pour les structures de données
 
-**[obligatoire]** : Chaque type de formulaire FATCA doit avoir son propre schéma (W8BEN, W8BEN-E, W9, etc.)
+**[obligatoire]** : Chaque type de document KYC doit avoir son propre schema (CNI, Passeport, Permis, etc.)
 
 **[fortement-conseillée]** : Les schémas doivent être validés avec des exemples de données réelles
 
@@ -175,7 +175,7 @@ Les pratiques peuvent être :
 
 **[recommandée]** : Tester les transformations de schémas (résolution de `$ref`, génération JSON Schema)
 
-**[fortement-conseillée]** : Les tests doivent valider que les schémas correspondent aux vrais formulaires FATCA
+**[fortement-conseillee]** : Les tests doivent valider que les schemas correspondent aux vrais documents KYC
 
 ---
 

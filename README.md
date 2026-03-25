@@ -1,242 +1,94 @@
-# 🏦 Démonstrateur KYC - Conférence
+# KYC Document Processing
 
-## 🎯 Objectif
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-Démonstration live de la **révolution apportée par les LLM multimodaux** dans le traitement de documents KYC (Know Your Customer).
+Traitement automatique de documents KYC (Know Your Customer) avec des LLM multimodaux (Gemini, GPT-4V, Claude).
 
-### Le problème avant
+## Pourquoi ce projet ?
 
-Pour créer un système de classification et extraction de documents KYC avec deep learning classique:
+### Le probleme avec le deep learning classique
 
-❌ **Plusieurs mois de développement**
-- Collecter et annoter des milliers d'images de documents
-- Créer des bounding boxes pour chaque champ à extraire
-- Entraîner des modèles CNN pour la classification
-- Entraîner des modèles de détection d'objets pour localiser les champs
-- Créer un classificateur binaire pour les cases à cocher (cochée/non cochée)
-- Développer du post-processing OCR complexe
-- Coder des règles spécifiques pour chaque type de document
-- Maintenance cauchemardesque à chaque nouveau format
+Pour creer un systeme de classification et extraction de documents KYC avec deep learning classique:
 
-❌ **Coûts élevés**
-- Infrastructure GPU pour l'entraînement
-- Équipe de 3-5 ML engineers
-- Data labelers pour annotation
-- Storage pour les datasets
+- **Plusieurs mois de developpement**: collecte de donnees, annotation, entrainement de modeles CNN, post-processing OCR
+- **Couts eleves**: infrastructure GPU, equipe ML, data labelers
+- **Resultats limites**: ne fonctionne que sur les formats appris, necessite re-entrainement pour chaque variation
 
-❌ **Résultats limités**
-- Ne fonctionne que sur les formats appris
-- Nécessite ré-entraînement pour chaque variation
-- Peu robuste aux changements de mise en page
+### La solution avec les LLM multimodaux
 
-### La solution maintenant
+- **Quelques heures de developpement**: prompts + schemas Pydantic + regles metier
+- **Couts minimes**: API calls, zero infrastructure d'entrainement
+- **Resultats superieurs**: fonctionne out-of-the-box sur nouveaux formats, robuste aux variations
 
-Avec les LLM multimodaux (Gemini, GPT-4V, Claude):
+## Fonctionnalites
 
-✅ **Quelques heures de développement**
-- Rédiger des prompts clairs
-- Définir des schémas Pydantic pour la structure
-- Coder les règles métier en Python
+### Documents traites
 
-✅ **Coûts minimes**
-- API calls (quelques centimes par document)
-- Zéro infrastructure d'entraînement
-- Une seule personne peut tout développer
-
-✅ **Résultats supérieurs**
-- Fonctionne out-of-the-box sur nouveaux formats
-- Comprend le contexte et les variations
-- Robuste aux changements de mise en page
-
-## 📋 Use Case: KYC Bancaire
-
-### Documents traités
-
-1. **Pièces d'identité**
-   - Carte Nationale d'Identité (CNI)
+1. **Pieces d'identite**
+   - Carte Nationale d'Identite (CNI)
    - Passeport
-   - Permis de conduire
-   
+   - Permis de conduire (avec detection des categories cochees)
+
 2. **Justificatifs de domicile**
-   - Factures (électricité, gaz, eau, internet, téléphone)
+   - Factures (electricite, gaz, eau, internet, telephone)
    - Quittances de loyer
    - Taxes
    - Attestations d'assurance
 
-3. **Coordonnées bancaires**
+3. **Coordonnees bancaires**
    - RIB/IBAN avec validation checksum modulo 97
 
-### Règles métier
+### Regles metier
 
-✓ Validation de cohérence entre documents (nom, prénom)  
-✓ Vérification des dates d'expiration  
-✓ Contrôle de l'ancienneté (justificatif < 3 mois)  
-✓ Validation technique IBAN (checksum)  
-✓ Détection visuelle des cases cochées (permis de conduire)
+- Validation de coherence entre documents (nom, prenom)
+- Verification des dates d'expiration
+- Controle de l'anciennete (justificatif < 3 mois)
+- Validation technique IBAN (checksum)
+- Detection visuelle des cases cochees (permis de conduire)
 
-## 🚀 Architecture
+## Installation
 
-```
-demonstrateur_KYC_grosse_conf/
-├── src/
-│   ├── chains/
-│   │   ├── schemas/
-│   │   │   └── kyc_schemas.py      # Schémas Pydantic pour chaque doc
-│   │   ├── configuration.py         # Config Google Cloud / Vertex AI
-│   │   ├── llm_chain.py            # Chain LLM principale
-│   │   └── prompts.py              # Prompts pour classification/extraction
-│   ├── utils/
-│   │   └── config.py               # Utilitaires de configuration
-│   ├── pipeline.py                 # Pipeline multi-documents
-│   └── main.py                     # Point d'entrée / démo
-├── tests/
-│   └── test_schemas.py             # Tests unitaires
-├── config/
-│   └── config.json                 # Configuration du projet
-└── examples/                       # Documents d'exemple pour la démo
-```
-
-## 🎪 Points à démontrer en conférence
-
-### 1. Classification automatique
-
-```python
-# Avant: modèle CNN entraîné sur 10k+ images
-# Maintenant: un prompt!
-
-chain = KYCDocumentChain()
-result = chain.classify_document("document.jpg")
-# → "carte_identite" avec 98% de confiance
-```
-
-### 2. Extraction structurée
-
-```python
-# Le LLM retourne directement un objet Pydantic validé
-cni = chain.extract_cni("cni.jpg")
-print(f"{cni.prenom} {cni.nom}")
-print(f"Valide: {cni.est_valide}")
-```
-
-### 3. ⭐ Cas des cases à cocher (KILLER FEATURE)
-
-**Permis de conduire: quelles catégories sont cochées?**
-
-```python
-permis = chain.extract_permis("permis.jpg")
-print(permis.categories)
-# → ["B", "A2"]
-```
-
-**Avant:**
-1. Créer un modèle de détection pour chaque case (AM, A1, A2, A, B, BE, C, etc.)
-2. Annoter des milliers d'images avec bounding boxes précises
-3. Entraîner un classificateur binaire (coché/pas coché)
-4. Gérer les cas ambigus (case partiellement cochée, croix vs coche)
-
-**Maintenant:**
-> "Quelles catégories sont cochées?"
-
-C'EST TOUT! 🤯
-
-### 4. Validation IBAN
-
-```python
-rib = chain.extract_rib("rib.jpg")
-print(f"IBAN: {rib.iban}")
-print(f"Checksum valide: {rib.iban_valide}")
-```
-
-Le LLM extrait, Python valide avec modulo 97.
-
-### 5. Cohérence multi-documents
-
-```python
-dossier = DossierKYC(
-    piece_identite=cni,
-    justificatif_domicile=justif,
-    rib=rib
-)
-
-dossier.valider_coherence()
-# Vérifie: même nom sur tous les docs, dates valides, etc.
-```
-
-## 💻 Installation
-
-### Prérequis
+### Prerequis
 
 - Python 3.10+
-- Accès Google Cloud avec Vertex AI activé
-- [uv](https://docs.astral.sh/uv/) (gestionnaire de packages ultra-rapide)
+- Acces Google Cloud avec Vertex AI active
+- [uv](https://docs.astral.sh/uv/) (gestionnaire de packages)
 - [just](https://github.com/casey/just) (task runner, optionnel)
 
 ### Setup
 
 ```bash
 # Cloner le projet
-git clone <repo-url>
-cd demonstrateur_KYC_grosse_conf
+git clone https://github.com/votre-username/kyc-document-processing.git
+cd kyc-document-processing
 
-# Installer les dépendances (uv crée automatiquement le .venv)
-just sync
-# ou
+# Installer les dependances
 uv sync
 
-# Configuration Google Cloud
+# Configuration
 cp .env.example .env
-# Éditer .env avec vos credentials
+# Editer .env avec vos credentials
 
-# Exporter les credentials
-export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/credentials.json"  # Linux/Mac
-# ou
-$env:GOOGLE_APPLICATION_CREDENTIALS="path\to\your\credentials.json"  # Windows PowerShell
+# Exporter les credentials Google Cloud
+export GOOGLE_APPLICATION_CREDENTIALS="path/to/your/credentials.json"
 ```
 
-> **Note**: `just --list` affiche toutes les commandes disponibles.
+## Utilisation
 
-### Configuration
-
-Éditer `config/config.json`:
-
-```json
-{
-  "project_id": "votre-project-id",
-  "location": "europe-west1",
-  "model": "gemini-1.5-pro-002",
-  "temperature": 0.0
-}
-```
-
-## 🎬 Utilisation pour la démo
-
-### Documents individuels
+### Document individuel
 
 ```bash
-just cni        # ou: uv run python src/main.py examples/cni.webp
-just passeport  # ou: uv run python src/main.py examples/passeport.webp
-just permis     # ou: uv run python src/main.py examples/permis_recto_verso.pdf
-just edf        # ou: uv run python src/main.py examples/jdom_edf.pdf
-just impots     # ou: uv run python src/main.py examples/jdom_impots.pdf
+uv run python src/main.py path/to/document.pdf
 ```
 
 ### Dossier complet
 
 ```bash
-just dossier
-# ou: uv run python src/main.py --folder examples/
+uv run python src/main.py --folder path/to/folder/
 ```
 
-### Document personnalisé
-
-```bash
-just run path/to/document.pdf
-# ou: uv run python src/main.py path/to/document.pdf
-```
-
-> `just --list` affiche toutes les commandes disponibles.
-
-### En code Python
+### En Python
 
 ```python
 from chains.llm_chain import KYCDocumentChain
@@ -251,115 +103,85 @@ pipeline = KYCPipeline()
 dossier = pipeline.process_folder("dossier_client/")
 ```
 
-## 🧪 Tests
+### Commandes just (optionnel)
 
 ```bash
-just test   # ou: uv run pytest tests/ -v
-just check  # Formatte, lint et tests en une commande
+just --list  # Affiche toutes les commandes disponibles
+just check   # Formate, lint et tests
+just test    # Lance les tests
 ```
 
-## 📊 Métriques de comparaison
+## Architecture
 
-| Critère | Deep Learning | LLM Multimodal |
-|---------|--------------|----------------|
-| **Temps de développement** | 3-6 mois | 1-3 jours |
-| **Dataset requis** | 10k+ images annotées | Zéro |
-| **Coût setup** | 50-100k€ | ~0€ |
-| **Coût par document** | ~0.01€ (infra) | ~0.03€ (API) |
-| **Maintenance** | Élevée | Faible |
-| **Nouveaux formats** | Ré-entraînement | Adaptation prompt |
-| **Précision** | 85-92% | 90-97% |
+```
+kyc-document-processing/
+├── src/
+│   ├── chains/
+│   │   ├── schemas/
+│   │   │   └── kyc_schemas.py      # Schemas Pydantic pour chaque doc
+│   │   ├── configuration.py         # Config Google Cloud / Vertex AI
+│   │   ├── llm_chain.py            # Chain LLM principale
+│   │   └── prompts.py              # Prompts pour classification/extraction
+│   ├── utils/
+│   │   └── config.py               # Utilitaires de configuration
+│   ├── pipeline.py                 # Pipeline multi-documents
+│   └── main.py                     # Point d'entree
+├── tests/
+│   └── test_schemas.py             # Tests unitaires
+└── config/
+    └── config.json                 # Configuration du projet
+```
 
-## 🎓 Messages clés pour la conférence
+## Exemples de code
 
-1. **Paradigm shift**: On passe de "entraîner un modèle" à "poser les bonnes questions"
+### Classification automatique
 
-2. **Démocratisation**: Plus besoin d'une équipe ML avec PhD pour traiter des documents
+```python
+chain = KYCDocumentChain()
+result = chain.classify_document("document.jpg")
+# -> "carte_identite" avec 98% de confiance
+```
 
-3. **Time-to-market**: De 6 mois à quelques jours
+### Extraction structuree
 
-4. **Cas d'usage killer**: Tout ce qui nécessitait de la vision + compréhension contextuelle
-   - Documents avec mise en page variable
-   - Cases à cocher
-   - Formats multiples
-   - Validation de cohérence
+```python
+cni = chain.extract_cni("cni.jpg")
+print(f"{cni.prenom} {cni.nom}")
+print(f"Valide: {cni.est_valide}")
+```
 
-5. **Limites actuelles**: 
-   - Coût par document (vs one-time training cost)
-   - Latence légèrement supérieure
-   - Dépendance à un provider externe
+### Detection des cases cochees (permis)
 
-6. **Tendance**: Les modèles deviennent meilleurs et moins chers chaque mois
+```python
+permis = chain.extract_permis("permis.jpg")
+print(permis.categories)
+# -> ["B", "A2"]
+```
 
-## 📝 Script de démo
+### Validation IBAN
 
-### Introduction (2 min)
+```python
+rib = chain.extract_rib("rib.jpg")
+print(f"IBAN: {rib.iban}")
+print(f"Checksum valide: {rib.iban_valide}")
+```
 
-"Imaginez: vous devez créer un système pour traiter des documents KYC bancaires. 
-CNI, passeports, justificatifs de domicile, RIB.
+## Tests
 
-Il y a 2 ans, vous auriez commencé par:
-- Collecter 10 000 images annotées
-- Créer des bounding boxes pour chaque champ
-- Entraîner un CNN pour la classification
-- etc.
+```bash
+uv run pytest tests/ -v
+```
 
-6 mois et 100k€ plus tard, vous avez un système qui fonctionne... 
-sur les formats que vous avez appris.
+## Contribuer
 
-Maintenant, regardez..."
+Les contributions sont les bienvenues ! Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour les details.
 
-### Démo live (8 min)
+## Licence
 
-1. **Classification** (1 min)
-   - Montrer plusieurs types de documents
-   - Le LLM les identifie instantanément
+Ce projet est sous licence MIT. Voir [LICENSE](LICENSE) pour plus de details.
 
-2. **Extraction CNI** (2 min)
-   - Afficher une CNI
-   - Extraction complète en JSON
-   - Validation de la date d'expiration
-
-3. **⭐ Cases à cocher - permis** (3 min)
-   - **LE MOMENT FORT**
-   - Afficher un permis avec catégories cochées
-   - "Avant: detection model + classificateur binaire + bounding boxes"
-   - "Maintenant: regardez"
-   - Extraction des catégories
-   - "C'est tout!"
-
-4. **Dossier complet** (2 min)
-   - Pipeline sur dossier entier
-   - Validation de cohérence
-   - Rapport final
-
-### Conclusion (2 min)
-
-"De 6 mois à 2 jours. De 100k€ à presque rien.
-Meilleure précision. Plus flexible.
-
-C'est ça, la révolution des LLM multimodaux.
-
-Et on n'a pas encore vu le plein potentiel.
-Gemini 2.0, GPT-5... ça ne fait que commencer."
-
-## 🔗 Ressources
+## Ressources
 
 - [Vertex AI Gemini](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/overview)
 - [Pydantic](https://docs.pydantic.dev/)
-- [Google Document AI](https://cloud.google.com/document-ai) (approche alternative OCR d'abord)
-
-## 📧 Contact
-
-Pour questions sur la démo ou le code.
-
----
-
-**Note**: Ce projet est un démonstrateur éducatif pour conférences. 
-Pour une utilisation en production, ajouter:
-- Gestion d'erreurs robuste
-- Logging structuré
-- Monitoring des coûts API
-- Cache des résultats
-- Tests de régression visuels
-- Pipeline CI/CD
+- [Google Document AI](https://cloud.google.com/document-ai)

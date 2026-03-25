@@ -1,8 +1,22 @@
 [project]
 name = "kyc-document-processing"
 version = "0.1.0"
-description = "Démonstrateur KYC - Traitement de documents avec LLM (RAD/LAD multi-classes)"
+description = "Traitement automatique de documents KYC avec LLM multimodaux"
 readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Vinorth VARATHARASAN"}
+]
+keywords = ["kyc", "llm", "document-processing", "multimodal", "gemini", "ocr"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
 requires-python = ">=3.10"
 dependencies = [
     "google-cloud-aiplatform>=1.38.0",
